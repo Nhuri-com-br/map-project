@@ -5,7 +5,7 @@ This project is focused on building modern and high-performance user interfaces 
 ## 🚀 Technologies Used
 
 * ⚛️ **React** – Library for building user interfaces
-* 🟦 **TypeScript** – JavaScript superset with static typing
+* 🟦 **TypeScript** – JavaScript superset with static typing using es7
 * ⚡ **Vite** – Fast and lightweight frontend build tool
 
 ---
