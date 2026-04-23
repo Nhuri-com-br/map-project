@@ -1,67 +1,71 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useCallback, useRef, useState } from 'react'
 import './App.css'
+import { useGetPokemon } from './hooks/pokeapi/useGetPokemon'
+import type { Pokemon } from './types/pokeapi/pokemon'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [pokemon, setPokemon] = useState<Pokemon | undefined>()
+  const { fetchPokemon } = useGetPokemon();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const onClick = useCallback(async () => {
+    const randomNumber = Math.floor(Math.random() * 386) + 1;
+    const result = await fetchPokemon(randomNumber);
+    console.log(result);
+    setPokemon(result);
+  }, [fetchPokemon]);
+  const onEnterDown = useCallback((event: { key: string }) => {
+    if ( event.key != "Enter" ){
+      return
+    }
+
+    const pokeGuess = inputRef.current?.value;
+    const pokeRight = pokemon?.name;
+    const finalGuess = pokeGuess?.toLowerCase();
+
+    console.log(finalGuess);
+    console.log(pokeGuess);
+    if ( finalGuess==pokeRight ) {
+      alert("Acerto miseravi");
+      onClick();
+      
+    } else {
+      alert("Errou")
+      
+    }
+  }, [onClick, pokemon?.name]);
 
   return (
     <>
       <section id="center">
         <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+          <img src={pokemon?.sprites.front_default} className="hiddenPokemon" width="170" height="179" alt="" />
         </div>
         <div>
-          <h1>Get started</h1>
+          <h1>Pokequiz</h1>
           <p>
-            saaalve123
+            <input id='guess' ref={inputRef} onKeyDown={onEnterDown} />
           </p>
         </div>
         <button
           className="counter"
-          onClick={() => setCount((count) => count + 1)}
+          onClick={onClick}
         >
-          Count is {count}
+          Quem é esse pokemon
         </button>
       </section>
 
       <div className="ticks"></div>
 
       <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
         <div id="social">
           <svg className="icon" role="presentation" aria-hidden="true">
             <use href="/icons.svg#social-icon"></use>
           </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
+          <h2>Links Importantes</h2>
+          <p>Entre para a Broforce</p>
           <ul>
             <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
+              <a href="https://github.com/Nhuri-com-br" target="_blank">
                 <svg
                   className="button-icon"
                   role="presentation"
@@ -73,7 +77,7 @@ function App() {
               </a>
             </li>
             <li>
-              <a href="https://chat.vite.dev/" target="_blank">
+              <a href="https://discord.gg/CHPBwmTkb8" target="_blank">
                 <svg
                   className="button-icon"
                   role="presentation"
@@ -82,30 +86,6 @@ function App() {
                   <use href="/icons.svg#discord-icon"></use>
                 </svg>
                 Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
               </a>
             </li>
           </ul>
