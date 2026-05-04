@@ -1,38 +1,8 @@
-import { useCallback, useRef, useState } from 'react'
 import './App.css'
-import { useGetPokemon } from './hooks/pokeapi/useGetPokemon'
-import type { Pokemon } from './types/pokeapi/pokemon'
+import { useApp } from './useApp'
 
 function App() {
-  const [pokemon, setPokemon] = useState<Pokemon | undefined>()
-  const { fetchPokemon } = useGetPokemon();
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const onClick = useCallback(async () => {
-    const randomNumber = Math.floor(Math.random() * 386) + 1;
-    const result = await fetchPokemon(randomNumber);
-    console.log(result);
-    setPokemon(result);
-  }, [fetchPokemon]);
-  const onEnterDown = useCallback((event: { key: string }) => {
-    if ( event.key != "Enter" ){
-      return
-    }
-
-    const pokeGuess = inputRef.current?.value;
-    const pokeRight = pokemon?.name;
-    const finalGuess = pokeGuess?.toLowerCase();
-
-    console.log(finalGuess);
-    console.log(pokeGuess);
-    if ( finalGuess==pokeRight ) {
-      alert("Acerto miseravi");
-      onClick();
-      
-    } else {
-      alert("Errou")
-      
-    }
-  }, [onClick, pokemon?.name]);
+  const { pokemon, inputRef, onEnterDown, onClick, } = useApp();
 
   return (
     <>
